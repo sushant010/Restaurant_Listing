@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     },
   });
 
-  // Define associations
+ 
   User.associate = (models) => {
     User.hasMany(models.Restaurant, { foreignKey: 'added_by' });
   };
