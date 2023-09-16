@@ -13,14 +13,14 @@ exports.listRestaurants = async (req, res) => {
 
 
 exports.createRestaurant = async (req, res) => {
-  const { name, address, contact } = req.body;
+  const { name, address, contact, added_by } = req.body; 
 
-  if (!name || !address || !contact) {
-    return res.status(400).json({ error: 'All fields are required' });
+  if (!name || !address || !contact || !added_by) { 
+    return res.status(400).json({ error: 'All fields are required, including added_by' });
   }
 
   try {
-    const restaurant = await Restaurant.create({ name, address, contact });
+    const restaurant = await Restaurant.create({ name, address, contact, added_by }); 
     res.status(201).json(restaurant);
   } catch (error) {
     console.error('Error creating restaurant:', error);
@@ -31,7 +31,7 @@ exports.createRestaurant = async (req, res) => {
 
 exports.updateRestaurant = async (req, res) => {
   const { id } = req.params;
-  const { name, address, contact } = req.body;
+  const { name, address, contact ,added_by } = req.body;
 
   if (!name || !address || !contact) {
     return res.status(400).json({ error: 'All fields are required' });
@@ -39,7 +39,7 @@ exports.updateRestaurant = async (req, res) => {
 
   try {
     const [updatedRows] = await Restaurant.update(
-      { name, address, contact },
+      { name, address, contact, added_by },
       { where: { id } }
     );
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,8 +10,11 @@ export default function AddRestro() {
     name: '',
     address: '',
     contact: '',
+    added_by:'',
   });
 
+
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({
@@ -31,7 +34,7 @@ export default function AddRestro() {
 
        
         setTimeout(() => {
-          setFormData({ name: '', address: '', contact: '' });
+          setFormData({ name: '', address: '', contact: '', added_by:'' });
           navigate('/');
         }, 2000);
 
@@ -43,6 +46,20 @@ export default function AddRestro() {
       console.error('Error adding restaurant:', error);
     }
   };
+
+
+
+  useEffect(() => {
+   
+    axios.get('http://localhost:5000/api/users')
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      });
+  }, []);
+
 
   return (
     <div className="custom-container">
@@ -91,6 +108,28 @@ export default function AddRestro() {
             onChange={handleChange}
             required
           />
+        </div>
+
+
+        <div className="custom-input-group">
+          <label htmlFor="added_by" className="custom-label">
+            Added By User Name
+          </label>
+          <select
+            className="custom-input"
+            id="added_by"
+            name="added_by"
+            value={formData.added_by}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>Select User</option>
+            {users.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="custom-button-container">

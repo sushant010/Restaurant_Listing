@@ -14,8 +14,11 @@ export default function EditRestro({ match }) {
     name: '',
     address: '',
     contact: '',
+    added_by: '',
   });
 
+
+  const [users, setUsers] = useState([]);
   useEffect(() => {
    
     axios.get(`http://localhost:5000/api/restaurants/${id}`)
@@ -26,12 +29,31 @@ export default function EditRestro({ match }) {
           name: restaurantData.name,
           address: restaurantData.address,
           contact: restaurantData.contact,
+          added_by: restaurantData.added_by,
         });
       })
+
+
+
       .catch((error) => {
         console.error('Error fetching restaurant data for editing:', error);
       });
-  }, [id]);
+
+
+      axios.get('http://localhost:5000/api/users')
+  .then((response) => {
+   
+    setUsers(response.data);
+  })
+  .catch((error) => {
+    console.error('Error fetching users:', error);
+  });
+}, [id]);
+  
+
+
+  
+
 
   const handleUpdate = async () => {
     try {
@@ -93,6 +115,27 @@ export default function EditRestro({ match }) {
             onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
           />
         </div>
+
+
+
+        <div className="custom-input-group">
+            <label htmlFor="added_by" className="custom-label">Added By User name</label>
+            <select
+              className="custom-input"
+              id="added_by"
+              name="added_by"
+              value={formData.added_by}
+              onChange={(e) => setFormData({ ...formData, added_by: e.target.value })}
+              required
+            >
+              <option value="" disabled>Select User</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
         <div className="custom-button-container">
           <button type="button" className="custom-button" onClick={handleUpdate}>

@@ -33,10 +33,13 @@ function Navbar() {
             <Link className="nav-link" to="/AddRestro">Add Restaurant</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/RestroTable">View Restaurant</Link>
+            <Link className="nav-link" to="/RestroTable">View Restaurants</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/RestroTable">Edit Restaurant</Link>
+            <Link className="nav-link" to="/CreateUser">Create User</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/UserTable">View Users</Link>
           </li>
         </ul>
         </div>

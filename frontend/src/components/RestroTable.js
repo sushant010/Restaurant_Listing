@@ -8,6 +8,7 @@ export default function RestroTable() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [users, setUsers] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +21,20 @@ export default function RestroTable() {
       .catch((error) => {
         console.error('Error fetching restaurant data:', error);
       });
+      axios
+      .get('http://localhost:5000/api/users')
+      .then((response) => {
+        const usersData = response.data.reduce((acc, user) => {
+          acc[user.id] = user;
+          return acc;
+        }, {});
+        setUsers(usersData);
+      })
+      .catch((error) => {
+        console.error('Error fetching users data:', error);
+      });
   }, []);
+ 
 
   const handleUpdate = (id) => {
     console.log(`Update restaurant with ID: ${id}`);
@@ -59,6 +73,7 @@ export default function RestroTable() {
               <th>Name</th>
               <th>Contact</th>
               <th>Address</th>
+              <th>Added By</th>
               <th>Options</th>
             </tr>
           </thead>
@@ -69,6 +84,7 @@ export default function RestroTable() {
                 <td>{restaurant.name}</td>
                 <td>{restaurant.contact}</td>
                 <td>{restaurant.address}</td>
+                <td>{users[restaurant.added_by]?.name }</td>
                 <td>
                   <button
                     className="btn btn-primary btn-sm"

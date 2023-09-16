@@ -6,6 +6,7 @@ import './Restro.css';
 export default function RestroList() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState({});
 
 
   function getRandomImage() {
@@ -33,7 +34,20 @@ export default function RestroList() {
       .catch((error) => {
         console.error('Error fetching restaurant data:', error);
       });
-  }, []); 
+
+      axios.get('http://localhost:5000/api/users')
+      .then((response) => {
+        const usersData = response.data.reduce((acc, user) => {
+          acc[user.id] = user;
+          return acc;
+        }, {});
+        setUsers(usersData);
+      })
+      .catch((error) => {
+        console.error('Error fetching users data:', error);
+      });
+  }, []);
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -53,9 +67,12 @@ export default function RestroList() {
                 <div className="card">
                 <img  src={getRandomImage()}/>
                   <div className="card-body">
-                    <h2 className="card-title"> <i class="fa-solid fa-utensils mx-2"></i>{restaurant.name}</h2>
+                    <h2 className="card-title text-capitalize "> <i class="fa-solid fa-utensils mx-2"></i>{restaurant.name}</h2>
                     <p className="card-text"> <i class="fa-solid fa-location-dot mx-2"></i>{restaurant.address}</p>
                     <p className="card-text"> <i class="fa-solid fa-phone-volume mx-2"></i>{restaurant.contact}</p>
+                    <p className="card-text"> <i className="fa-solid fa-user mx-2"></i>
+                     {users[restaurant.added_by]?.name || 'RestroMania'}
+                    </p>
                   </div>
                 </div>
               </div>

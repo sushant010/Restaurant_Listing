@@ -10,11 +10,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-const restaurantRoutes = require('./routes/restaurantRoutes.js');
-
+const restaurantRoutes = require('./Routes/restaurantRoutes.js');
+const userRoutes = require('./Routes/userRoutes.js');
 
 
 app.use('/api', restaurantRoutes);
+app.use('/api', userRoutes);
 
 db.sequelize.sync().then(() => {
   console.log('Database connected.');
